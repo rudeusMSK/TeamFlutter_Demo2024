@@ -35,11 +35,11 @@ Demo 1:
 
 ---
 
-#### Update 2: Design the navigation bar according to the Figma template.
+### Update 2: Design the navigation bar according to the Figma template.
 
 ---
 
-Template:
+Template Figma here: [Click ! moe moe ฅ^•ﻌ•^ฅ ~!](https://www.figma.com/design/AzwPKLm81SALQlf1J5CzB1/app-shopping-sports?node-id=0-1&t=8lrFv3xbg03qVihm-0)
 
 <p align="center">
   <img src="https://github.com/rudeusMSK/TeamFlutter_Demo2024/assets/160387470/17e97a09-93b1-49a4-9706-7edd1a56f298" width="185"/>
