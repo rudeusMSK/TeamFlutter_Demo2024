@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/components/app_bar.dart';
+import 'package:mainpage_detailuser_v1/components/bottom_navigationbar.dart';
 
 class Main_screen extends StatefulWidget {
   const Main_screen({super.key, required this.title});
@@ -12,6 +13,7 @@ class Main_screen extends StatefulWidget {
 class _Main_screenState extends State<Main_screen> {
   
    int _selectedIndex = 0;
+   
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -28,44 +30,7 @@ class _Main_screenState extends State<Main_screen> {
     return Scaffold(
       appBar: const CustomAppBar(),
       body: body(),
-            bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Trang Chủ',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'cây púb',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'tym',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Chat chít',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Thông tin',
-          ),
-        ],
-        
-backgroundColor: const Color(0xFF152354),
-        selectedItemColor: Colors.white,
-        unselectedItemColor:
-            Colors.white,
-        selectedIconTheme: const IconThemeData(
-          color: Colors.amber,
-        ),
-        unselectedIconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        type: BottomNavigationBarType.fixed, 
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      ),
+      bottomNavigationBar: const CustomBottomNavigationBar(),
       drawer: myDrawer(),
     );
   }
