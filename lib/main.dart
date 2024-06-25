@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/View/Main_screen.dart';
 
+
 void main() {
   runApp(const MyApp());
 }
 
+// MyApp:
 class MyApp extends StatelessWidget {
+  
+  // constructor:
   const MyApp({super.key});
 
   @override
@@ -20,4 +24,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

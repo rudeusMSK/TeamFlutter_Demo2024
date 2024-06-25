@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/components/app_bar.dart';
 import 'package:mainpage_detailuser_v1/components/bottom_navigationbar.dart';
 
-class Chat_screen extends StatefulWidget {
-  const Chat_screen({super.key, required this.title});
-  final String title;
+class Edit_screen extends StatefulWidget {
+  const Edit_screen({super.key});
 
   @override
-  State<Chat_screen> createState() => _Main_screenState();
+  State<Edit_screen> createState() => _Main_screenState();
 }
 
-class _Main_screenState extends State<Chat_screen> {
+class _Main_screenState extends State<Edit_screen> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -27,9 +26,9 @@ class _Main_screenState extends State<Chat_screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+     // appBar: const CustomAppBar(),
       body: body(),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
+     // bottomNavigationBar: const CustomBottomNavigationBar(),
       drawer: myDrawer(),
     );
   }
@@ -37,7 +36,7 @@ class _Main_screenState extends State<Chat_screen> {
   Widget body() {
     return const SafeArea(
       child: Center(
-        child: Text("Chat Screen Body"),
+        child: Text("Edit Screen Body"),
       ),
     );
   }

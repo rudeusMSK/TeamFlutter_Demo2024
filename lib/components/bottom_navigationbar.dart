@@ -1,32 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget
-    implements PreferredSizeWidget {
-  const CustomBottomNavigationBar({super.key});
+class CustomBottomNavigationBar extends StatelessWidget {
+  final int selectedIndex;
+  final Function(int) onItemTapped;
 
-  @override
-  _CustomBottomNavigationBarState createState() =>
-      _CustomBottomNavigationBarState();
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  const CustomBottomNavigationBar({
+    required this.selectedIndex,
+    required this.onItemTapped,
+    super.key,
+  });
 
   Widget _buildIcon(String assetName, int index) {
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (_selectedIndex == index)
+        if (selectedIndex == index)
           Container(
             width: 40,
             height: 40,
@@ -39,7 +27,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           assetName,
           width: 24,
           height: 24,
-          color: _selectedIndex == index ? Colors.white : Colors.grey,
+          color: selectedIndex == index ? Colors.white : Colors.grey,
         ),
       ],
     );
@@ -48,29 +36,34 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 10.0), // or 15.0 - 20.0
       child: ClipRRect(
         borderRadius: const BorderRadius.all(
           Radius.circular(20.0),
         ),
         child: BottomNavigationBar(
           items: <BottomNavigationBarItem>[
+            // home = 0
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Home.png', 0),
               label: 'Trang Chủ',
             ),
+            // edit = 1
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Edit.png', 1),
               label: 'cây púb',
             ),
+            // love = 2
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Love.png', 2),
               label: 'tym',
             ),
+            // chat = 3
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Chat.png', 3),
               label: 'Chat chít',
             ),
+            // profile = 4
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Profile.png', 4),
               label: 'Thông tin',
@@ -79,15 +72,17 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           backgroundColor: const Color(0xFF152354),
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white,
+          // icon select:
           selectedIconTheme: const IconThemeData(
             color: Colors.amber,
           ),
+          // icon select:
           unselectedIconTheme: const IconThemeData(
             color: Colors.white,
           ),
           type: BottomNavigationBarType.fixed,
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
+          currentIndex: selectedIndex,
+          onTap: onItemTapped,
         ),
       ),
     );

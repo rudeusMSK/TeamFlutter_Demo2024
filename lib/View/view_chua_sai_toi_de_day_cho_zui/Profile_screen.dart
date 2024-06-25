@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/components/app_bar.dart';
 import 'package:mainpage_detailuser_v1/components/bottom_navigationbar.dart';
 
-class Edit_screen extends StatefulWidget {
-  const Edit_screen({super.key, required this.title});
-  final String title;
+// ignore: camel_case_types
+class Profile_screen extends StatefulWidget {
+  const Profile_screen({super.key});
 
   @override
-  State<Edit_screen> createState() => _Main_screenState();
+  State<Profile_screen> createState() => _Main_screenState();
 }
 
-class _Main_screenState extends State<Edit_screen> {
+// ignore: camel_case_types
+class _Main_screenState extends State<Profile_screen> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -27,9 +28,9 @@ class _Main_screenState extends State<Edit_screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(),
+      //appBar: const CustomAppBar(),
       body: body(),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
+      //bottomNavigationBar: const CustomBottomNavigationBar(),
       drawer: myDrawer(),
     );
   }
@@ -37,7 +38,7 @@ class _Main_screenState extends State<Edit_screen> {
   Widget body() {
     return const SafeArea(
       child: Center(
-        child: Text("Edit Screen Body"),
+        child: Text("Profile Screen Body"),
       ),
     );
   }
