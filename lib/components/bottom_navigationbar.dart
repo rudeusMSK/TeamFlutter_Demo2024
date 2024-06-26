@@ -51,17 +51,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
             // edit = 1
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Edit.png', 1),
-              label: 'cây púb',
+              label: 'tìm kiếm',
             ),
             // love = 2
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Love.png', 2),
-              label: 'tym',
+              label: 'tym💕',
             ),
             // chat = 3
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Chat.png', 3),
-              label: 'Chat chít',
+              label: 'đánh giá',
             ),
             // profile = 4
             BottomNavigationBarItem(
