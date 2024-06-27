@@ -62,7 +62,15 @@ Template Figma here: [Click ! moe moe ฅ^•ﻌ•^ฅ ~!](https://www.figma.co
 
 ---
 
-### update 4: Add provider
+### update 4: build Layout Home screen
+
+<p align="center">
+  <img src="https://github.com/rudeusMSK/TeamFlutter_Demo2024/assets/160387470/2afb5844-5ec2-4e88-a1be-9e64307da0f1" width="600"/>
+</p>
+
+---
+
+### update 5: Add provider
 delay !
 
 [dowload pakage here](https://pub.dev/packages/provider)
