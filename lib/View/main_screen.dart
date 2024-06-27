@@ -23,22 +23,10 @@ class Main_screen extends StatefulWidget {
 // ignore: camel_case_types
 class _Main_screenState extends State<Main_screen> {
   
-  /* 
-    TODO: Class zí zụ làm mòe nhớ xóa nhoaa !
-  */
   User user = User(18, '🐸');
 
   // Attribute:
   int _selectedIndex = 0; // default: home body.
-
-  List<Widget> bodyItem = [
-    // List Widget body:
-    homebody(), // 0
-    editbody(), // 1
-    lovebody(), // 2
-    chatbody(), // 3
-    profilebody(), // 4
-  ];
 
   final PageController _pageController = PageController();
 
@@ -57,24 +45,32 @@ class _Main_screenState extends State<Main_screen> {
 
   @override
   Widget build(BuildContext context) {
+    // Move bodyItem initialization here to ensure context is available
+    List<Widget> bodyItem = [
+      homebody(context), // 0
+      editbody(), // 1
+      lovebody(), // 2
+      chatbody(), // 3
+      profilebody(), // 4
+    ];
+
     return Scaffold(
+      // appbar:
       appBar: const CustomAppBar(),
+      // body:
       body: PageView(
         controller: _pageController,
-
         onPageChanged: (index) {
           setState(() {
             _selectedIndex = index;
           });
         },
 
-      // lỗi dữ liệu json j á => tính sau ฅ^•ﻌ•^ฅ
-      // demo:
-      // children: user.name.length != 2 ? bodyItem : [Errorbody(user)], // Errorbody(var)
-      children: bodyFunction_(),
-      
+        // lỗi dữ liệu json j á => tính sau ฅ^•ﻌ•^ฅ
+        // demo:
+        // children: user.name.length != 2 ? bodyItem : [Errorbody(user)], // Errorbody(var)
+        children: bodyFunction_(bodyItem),
       ),
-
       // CustomBottomNavigationBar(int, void(int))
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex,
@@ -91,7 +87,7 @@ class _Main_screenState extends State<Main_screen> {
   * => lỗi j đó hoặc dữ liệu ko hợp lệ 🐸🐸
   * hoặc bình thường trả về danh sách widget body.
   */
-  List<Widget> bodyFunction_() {
+  List<Widget> bodyFunction_(List<Widget> bodyItem) {
    return user.name != '🐸' 
     ? [Errorbody(user)] // Errorbody(var)
     : bodyItem; // 5
