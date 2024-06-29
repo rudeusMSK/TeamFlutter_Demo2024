@@ -64,6 +64,11 @@ flutter:
   - lib/public/icons/Love.png
   - lib/public/icons/Profile.png
   - lib/public/icons/Home.png
+  - lib\public\icons\category\Adidas.png
+  - lib\public\icons\category\All.png
+  - lib\public\icons\category\Fila.png
+  - lib\public\icons\category\Nike.png
+  - lib\public\icons\category\Puna.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

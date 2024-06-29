@@ -1,35 +1,79 @@
 import 'package:flutter/material.dart';
 
-final List<String> entries = <String>['Logo1', 'Logo2', 'Logo3'];
+// select item: (default)
+int selectedIndex = 1;
+
+//final List<String> categoryItems = <String>[];
+// demo:
+const String iconAddress = "lib\\public\\icons\\category\\";
+final List<String> entries = <String>[
+  '${iconAddress}All.png',
+  '${iconAddress}Adidas.png',
+  '${iconAddress}Fila.png',
+  '${iconAddress}Nike.png',
+  '${iconAddress}Puna.png',
+];
+
 final List<int> colorCodes = <int>[600, 500, 100];
 
 Widget homebody(BuildContext context) {
   return Column(
     children: [
-      const Text(
-        'èn choai nêu prồ đúch',
-        style: TextStyle(
-          color: Colors.green,
-        ),
-        textAlign: TextAlign.center,
-      ),
-      const Text(
-        'Product',
-        style: TextStyle(
-          color: Colors.green,
-        ),
-        textAlign: TextAlign.left,
-      ),
+      // Title:
+      productTitle(context),
+      // Category Items:
       categoryListView(context),
+      // Products Items:
       Expanded(child: productListView(context)),
     ],
   );
 }
 
+/*
+    widgets:
+*/
+
+// Title:
+Widget productTitle(BuildContext context) {
+  return Container(
+    margin: const EdgeInsets.only(top: 20, left: 5, right: 5, bottom: 0),
+    padding: const EdgeInsets.all(5),
+    child: const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            'èn choai nêu prồ đúch',
+            style: TextStyle(
+              color: Color(0xFF152354),
+              fontSize: 30,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            'Product',
+            style: TextStyle(
+              color: Color(0xFF152354),
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.left,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// Category Items:
 Widget categoryListView(BuildContext context) {
   return Container(
     margin: const EdgeInsets.symmetric(vertical: 2),
-    height: 50, // Height of the parent Container
+    height: 80,
     child: ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: entries.length,
@@ -38,31 +82,46 @@ Widget categoryListView(BuildContext context) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              padding: const EdgeInsets.all(5),
               margin: const EdgeInsets.all(2),
-              width: 160,
-              height: 40,
-              color: Colors.primaries[index % Colors.primaries.length],
-              child: Center(child: Text('Entry ${entries[index]}')),
+              width:100,
+              height: 100,
+              decoration: const BoxDecoration(
+                // color: Colors.primaries[index % Colors.primaries.length],
+                color: Color(0xFFD9D9D9),
+                shape: BoxShape.circle,
+              ),
+              // icon:
+              child: Center(
+                child: Image.asset(entries[index],
+                  width: 60,
+                  height: 60,
+                ),
+              ),
             ),
-          ],
-        );
-      },
-    ),
+          ],);
+      },),
   );
 }
 
+// Products Items:
 Widget productListView(BuildContext context) {
 //  const title = 'Grid List';
   return GridView.count(
-    // Create a grid with 2 columns. If you change the scrollDirection to
-    // horizontal, this produces 2 rows.
     crossAxisCount: 2,
-    // Generate 100 widgets that display their index in the List.
     children: List.generate(100, (index) {
       return Center(
-        child: Text(
-          'Item $index',
-          style: Theme.of(context).textTheme.headlineSmall,
+        child: Container(
+          margin: const EdgeInsets.all(5),
+          padding: const EdgeInsets.fromLTRB(50, 2, 50, 100),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF8F8FA),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            'Item $index',
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
         ),
       );
     }),
