@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-// Lỗi  j á
+// Lỗi j á:
 Widget Errorbody(var user) => SafeArea(
       child: Center(
         child: Column(
@@ -31,13 +31,3 @@ Widget Errorbody(var user) => SafeArea(
         ),
       ),
     );
-
-/* 
-  TODO: Class zí zụ làm mòe nhớ xóa nhoaa !
-*/
-class User {
-  final int age;
-  final String name;
-
-  User(this.age, this.name);
-}

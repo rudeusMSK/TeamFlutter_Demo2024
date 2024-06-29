@@ -8,6 +8,8 @@ import 'package:mainpage_detailuser_v1/components/bodyWidgets/loveBody.dart';
 import 'package:mainpage_detailuser_v1/components/bodyWidgets/profileBody.dart';
 import 'package:mainpage_detailuser_v1/components/bodyWidgets/Errorbody.dart';
 
+import 'package:mainpage_detailuser_v1/Model/Fake_User.dart';
+
 // ignore: camel_case_types
 class Main_screen extends StatefulWidget {
   // Attribute:
@@ -45,9 +47,9 @@ class _Main_screenState extends State<Main_screen> {
 
   @override
   Widget build(BuildContext context) {
-    // Move bodyItem initialization here to ensure context is available
+    // TODO: Move bodyItem initialization here to ensure context is available
     List<Widget> bodyItem = [
-      homebody(context), // 0
+      const HomeBody(), // 0
       editbody(), // 1
       lovebody(), // 2
       chatbody(), // 3
