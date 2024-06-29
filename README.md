@@ -68,6 +68,14 @@ Template Figma here: [Click ! moe moe ฅ^•ﻌ•^ฅ ~!](https://www.figma.co
   <img src="https://github.com/rudeusMSK/TeamFlutter_Demo2024/assets/160387470/2afb5844-5ec2-4e88-a1be-9e64307da0f1" width="600"/>
 </p>
 
+<hr>
+
+####update 4.5: Design Category Items (Cannot click/select Item yet)
+
+<p align="center">
+  <img src="https://github.com/rudeusMSK/TeamFlutter_Demo2024/assets/160387470/70d55076-fa03-4a26-bf63-3741b7243970" width="600"/>
+</p>
+
 ---
 
 ### update 5: Add provider
