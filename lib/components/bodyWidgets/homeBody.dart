@@ -30,7 +30,7 @@ class _HomeBodyState extends State<HomeBody> {
     Category(2, "Adidas", "${iconAddress}Adidas.png"),
     Category(3, "Fila",   "${iconAddress}Fila.png"),
     Category(4, "Nike",   "${iconAddress}Nike.png"),
-    Category(5, "Puna",   "${iconAddress}Puna.png"),
+    Category(5, "Puma",   "${iconAddress}Puna.png"),
   ];
 
   /* ****************************************** END ******************************************
