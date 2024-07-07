@@ -10,7 +10,7 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  static const String iconAddress = "lib\\public\\icons\\category\\";
+  static const String iconAddress = "lib/public/icons/category/";
   // select item: (default)
   int selectedIndex = 0;
 
