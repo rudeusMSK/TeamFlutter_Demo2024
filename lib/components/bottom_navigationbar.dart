@@ -56,7 +56,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             // love = 2
             BottomNavigationBarItem(
               icon: _buildIcon('lib/public/icons/Love.png', 2),
-              label: 'tym💕',
+              label: 'Thích',
             ),
             // chat = 3
             BottomNavigationBarItem(
