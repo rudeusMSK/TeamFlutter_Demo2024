@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/Model/Fake_Category.dart';
+import 'package:mainpage_detailuser_v1/Model/Product.dart';
 
 class HomeBody extends StatefulWidget {
   const HomeBody({super.key});
@@ -12,7 +13,11 @@ class HomeBody extends StatefulWidget {
 class _HomeBodyState extends State<HomeBody> {
   static const String iconAddress = "lib\\public\\icons\\category\\";
   // select item: (default)
-  int selectedIndex = 0;
+  int selectedCategortItem = 0;
+  int selectProductItem = 0;
+  //demo:
+   int price = 10;
+   String unit = '\$'; 
 
   /* ****************************************** Start ******************************************
 
@@ -26,13 +31,13 @@ class _HomeBodyState extends State<HomeBody> {
 */
   final List<Category> category = [
     // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
-    Category(1, "All",    "${iconAddress}All.png"),
+    Category(1, "All", "${iconAddress}All.png"),
     Category(2, "Adidas", "${iconAddress}Adidas.png"),
-    Category(3, "Fila",   "${iconAddress}Fila.png"),
-    Category(4, "Nike",   "${iconAddress}Nike.png"),
-    Category(5, "Puna-đây là hình cate ko phải sản phẩm",   "${iconAddress}Puna.png"),
+    Category(3, "Fila", "${iconAddress}Fila.png"),
+    Category(4, "Nike", "${iconAddress}Nike.png"),
+    Category(
+        5, "Puna-đây là hình cate ko phải sản phẩm", "${iconAddress}Puna.png"),
   ];
-
   /* ****************************************** END ******************************************
 
     - ฅ^•ﻌ•^ฅ demo only!:
@@ -59,8 +64,8 @@ class _HomeBodyState extends State<HomeBody> {
   Widget productTitle() {
     String selectedCategory = 'Sản phẩm'; // default
 
-    if (selectedIndex >= 0 && selectedIndex < category.length) {
-      selectedCategory = 'Sản phẩm ${category[selectedIndex].name}';
+    if (selectedCategortItem >= 0 && selectedCategortItem < category.length) {
+      selectedCategory = category[selectedCategortItem].name.toString();
     }
 
     return Container(
@@ -109,7 +114,7 @@ class _HomeBodyState extends State<HomeBody> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                selectedIndex = index;
+                selectedCategortItem = index;
               });
             },
             child: Row(
@@ -127,7 +132,7 @@ class _HomeBodyState extends State<HomeBody> {
                   height: 100,
 
                   decoration: BoxDecoration(
-                    color: selectedIndex == index
+                    color: selectedCategortItem == index
                         ? const Color(0xFF69BDFC)
                         : const Color(0xFFD9D9D9),
                     shape: BoxShape.circle,
@@ -157,24 +162,28 @@ class _HomeBodyState extends State<HomeBody> {
         return Center(
           child: Container(
             margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.fromLTRB(50, 2, 50, 100),
+            padding: const EdgeInsets.fromLTRB(50, 2, 50, 40),
             decoration: BoxDecoration(
               color: const Color(0xFFF8F8FA),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               children: [
-                  Image.asset(
-                  selectedIndex == index
-                      // ignore: unnecessary_string_interpolations
-                      ? '${category[index].logo}' 
-                      :  'lib/public/imgs/Kurumi.png',
+                Image.asset(
+                  // đổi từ cate -> product class -> show list product ra nhóa.
+                  // selectedCategortItem == index
+                  //     // ignore: unnecessary_string_interpolations
+                  //     ? '${category[index].logo}'
+                  //     : 'lib/public/imgs/Kurumi.png',
+                  category[index].logo.toString(),
                   width: 60,
                   height: 60,
                 ),
-
                 Text(
                   'Sản phẩm $index',
+                ),
+                Text(
+                  'Giá $price $unit',
                 ),
               ],
             ),
