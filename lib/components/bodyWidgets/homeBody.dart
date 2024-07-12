@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/Model/Fake_Category.dart';
 import 'package:mainpage_detailuser_v1/Model/Product.dart';
+import 'package:mainpage_detailuser_v1/ViewModel/product_view_Model.dart';
+import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class HomeBody extends StatefulWidget {
-  const HomeBody({super.key});
+  late Product? product;
+
+  HomeBody({super.key, this.product});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -12,12 +17,23 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
   static const String iconAddress = "lib/public/icons/category/";
+
+  //
+  ProductViewModel productViewModel = ProductViewModel();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    productViewModel.fetchProductList();
+  }
+
   // select item: (default)
   int selectedCategortItem = 0;
   int selectProductItem = 0;
   //demo:
-   int price = 10;
-   String unit = '\$'; 
+  int price = 10;
+  String unit = '\$';
 
   /* ****************************************** Start ******************************************
 
@@ -33,9 +49,9 @@ class _HomeBodyState extends State<HomeBody> {
     // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
     Category(1, "All", "${iconAddress}All.png"),
     Category(2, "Adidas", "${iconAddress}Adidas.png"),
-    Category(3, "Fila",   "${iconAddress}Fila.png"),
-    Category(4, "Nike",   "${iconAddress}Nike.png"),
-    Category(5, "Puma",   "${iconAddress}Puna.png"),
+    Category(3, "Fila", "${iconAddress}Fila.png"),
+    Category(4, "Nike", "${iconAddress}Nike.png"),
+    Category(5, "Puma", "${iconAddress}Puna.png"),
   ];
   /* ****************************************** END ******************************************
 
@@ -50,7 +66,11 @@ class _HomeBodyState extends State<HomeBody> {
       children: [
         productTitle(),
         categoryListView(),
-        Expanded(child: productListView()),
+        Expanded(child: ChangeNotifierProvider(
+          create: (context) => productViewModel,
+        child: productListView(),
+        )
+      ),
       ],
     );
   }
@@ -155,40 +175,52 @@ class _HomeBodyState extends State<HomeBody> {
 
 // Products Items:
   Widget productListView() {
-    return GridView.count(
-      crossAxisCount: 2,
-      children: List.generate(category.length, (index) {
-        return Center(
-          child: Container(
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.fromLTRB(50, 2, 50, 40),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF8F8FA),
-              borderRadius: BorderRadius.circular(10),
+    return Consumer<ProductViewModel>(
+      builder: (context, viewModel, child) {
+        // => chưa có repon từ endpoit >>> loading.gif
+        if (viewModel.products.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        } 
+        // show product info:
+        else {
+          return GridView.builder( // update: GridView.Count => GridView.builder
+            // Use: (hướng dẫn sử zụn)
+            itemCount: viewModel.products.length, // số lượng items
+            // build gird: items positions
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, // col (2 cột như trên figma nhóa !)
+              childAspectRatio: 4 / 5, // chiều rộng dài của mỗi item (để đại i, theo ông bà mách bảo :3 !!)
             ),
-            child: Column(
-              children: [
-                Image.asset(
-                  // đổi từ cate -> product class -> show list product ra nhóa.
-                  // selectedCategortItem == index
-                  //     // ignore: unnecessary_string_interpolations
-                  //     ? '${category[index].logo}'
-                  //     : 'lib/public/imgs/Kurumi.png',
-                  category[index].logo.toString(),
-                  width: 60,
-                  height: 60,
+            itemBuilder: (context, index) {
+              // Get: product
+              final product = viewModel.products[index];
+              return Card(
+                child: Column(
+                  children: [
+                    Image.asset(
+                    // todo: update backend -> link hình sản phẩm !
+                      category[1]
+                          .logo
+                          .toString(),
+                      width: 60,
+                      height: 60,
+                    ),
+                    // todo: update backend -> link hình sản phẩm !
+                    Text(
+                      product.tenSP ?? "",
+                      style:
+                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Giá $price $unit',  // todo: update backend -> Giá sản phẩm!
+                    ),
+                  ],
                 ),
-                Text(
-                  'Sản phẩm $index',
-                ),
-                Text(
-                  'Giá $price $unit',
-                ),
-              ],
-            ),
-          ),
-        );
-      }),
+              );
+            },
+          );
+        }
+      },
     );
   }
 }
