@@ -1,3 +1,4 @@
+// ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/Model/Fake_Category.dart';
 import 'package:mainpage_detailuser_v1/Model/Product.dart';
@@ -11,7 +12,6 @@ class HomeBody extends StatefulWidget {
   HomeBody({super.key, this.product});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomeBodyState createState() => _HomeBodyState();
 }
 
@@ -25,7 +25,7 @@ class _HomeBodyState extends State<HomeBody> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    productViewModel.fetchProductList();
+    productViewModel.fetch_Product_Card_List();
   }
 
   // select item: (default)
@@ -33,7 +33,7 @@ class _HomeBodyState extends State<HomeBody> {
   int selectProductItem = 0;
   //demo:
   int price = 10;
-  String unit = '\$';
+  String unit = 'Đ';
 
   /* ****************************************** Start ******************************************
 
@@ -41,7 +41,6 @@ class _HomeBodyState extends State<HomeBody> {
                   xóa khi đã có backend ! 😺😺😺
                   
      ****************************************** Start ****************************************** */
-
 /* 
   TODO: Class zí zụ làm mòe nhớ xóa nhoaa !
 */
@@ -66,20 +65,20 @@ class _HomeBodyState extends State<HomeBody> {
       children: [
         productTitle(),
         categoryListView(),
-        Expanded(child: ChangeNotifierProvider(
+        Expanded(
+            child: ChangeNotifierProvider(
           create: (context) => productViewModel,
-        child: productListView(),
-        )
-      ),
+          child: productListView(),
+        )),
       ],
     );
   }
 
-  /*
-      widgets:
- */
+/*
+      ****************** widgets ******************
+*/
 
-// Title:
+// Title page:
   Widget productTitle() {
     String selectedCategory = 'Sản phẩm'; // default
 
@@ -178,14 +177,15 @@ class _HomeBodyState extends State<HomeBody> {
     return Consumer<ProductViewModel>(
       builder: (context, viewModel, child) {
         // => chưa có repon từ endpoit >>> loading.gif
-        if (viewModel.products.isEmpty) {
+        if (viewModel.productCards.isEmpty) {
           return const Center(child: CircularProgressIndicator());
-        } 
+        }
         // show product info:
         else {
-          return GridView.builder( // update: GridView.Count => GridView.builder
+          return GridView.builder(
+            // update: GridView.Count => GridView.builder
             // Use: (hướng dẫn sử zụn)
-            itemCount: viewModel.products.length, // số lượng items
+            itemCount: viewModel.productCards.length, // số lượng items
             // build gird: items positions
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // col (2 cột như trên figma nhóa !)
@@ -193,26 +193,27 @@ class _HomeBodyState extends State<HomeBody> {
             ),
             itemBuilder: (context, index) {
               // Get: product
-              final product = viewModel.products[index];
+              final product = viewModel.productCards[index];
               return Card(
                 child: Column(
                   children: [
-                    Image.asset(
-                    // todo: update backend -> link hình sản phẩm !
-                      category[1]
-                          .logo
-                          .toString(),
-                      width: 60,
-                      height: 60,
+                  // Img product:
+                   product.imgUrl != null ? Image.network(
+                      product.imgUrl.toString(),
+                      width: 160,
+                      height: 200,
+                    ) : const Text("Sp không có hình ",
+                    style: TextStyle( fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    // todo: update backend -> link hình sản phẩm !
+                  // Name Product:
                     Text(
                       product.tenSP ?? "",
-                      style:
-                          const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
                     ),
+                  // Price Product:
                     Text(
-                      'Giá $price $unit',  // todo: update backend -> Giá sản phẩm!
+                      'Giá: ${product.giaBan} $unit', 
                     ),
                   ],
                 ),
@@ -223,4 +224,9 @@ class _HomeBodyState extends State<HomeBody> {
       },
     );
   }
+
+/*
+      ****************** widgets ******************
+*/
+
 }

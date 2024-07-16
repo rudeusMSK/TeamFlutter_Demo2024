@@ -1,12 +1,11 @@
-// chạy thử lần 1 chỉnh sau á ! 
 class Product {
   int? idsp;
   String? tenSP;
-  int? idThuongHieu; // đổi => tên thương hiệu
-  int? idLoai; // đổi => tên loại sp
-  int? idMau; // đổi => tên màu sắc 
-  int? idTrangThai; // đổi/xóa => tên trạng thái
-  int? idnv; // đổi/xóa => tên nhân viên
+  int? idThuongHieu;
+  int? idLoai;
+  int? idMau;
+  int? idTrangThai;
+  int? idnv;
 
   Product(
       {this.idsp,
