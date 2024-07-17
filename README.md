@@ -104,7 +104,7 @@ Template Figma here: [Click ! moe moe ฅ^•ﻌ•^ฅ ~!](https://www.figma.co
 </p>
 </details>
 
-<details open="" align="left">
+<details lose="" align="left">
   <summary>  
   # update 4.6: Design Category Items (Can click/select Item yet)
   </summary>
@@ -117,7 +117,7 @@ Template Figma here: [Click ! moe moe ฅ^•ﻌ•^ฅ ~!](https://www.figma.co
   
 </details>
 
-<details open="" align="left">
+<details lose="" align="left">
   <summary>  
   # update 5: Add provider
   </summary>
@@ -125,6 +125,32 @@ Template Figma here: [Click ! moe moe ฅ^•ﻌ•^ฅ ~!](https://www.figma.co
 delay !
 
 [dowload pakage here](https://pub.dev/packages/provider)
+
+---
+
+
+</details> 
+
+  ---
+  
+</details>
+
+<details open="" align="left">
+  <summary>  
+  # Sorry: 🙊🙊🙊
+  </summary>
+<br>
+  
+Sorry for the inconvenience! The reason is due to our busyness; the versions have progressed too far, and we couldn't update the details. We will summarize as follows:
+
+The current version has a provider.
+The current version is using an API from hosting, with the backend utilizing ASP.NET Web API + Swagger GUI.
+If you open our source code, you can see all the security information such as username/password, as well as our domain and endpoint. They are not secured.
+In our next version, we will reorganize the source so that the API can use localhost. You can download the backend using MongoDB, which we will provide later.
+Regarding the App's progress:
+You can open the home page and click on any product to see details (only the product ID is displayed, the other information is fixed).
+
+We will update it as soon as possible! Thank you
 
 ---
 
