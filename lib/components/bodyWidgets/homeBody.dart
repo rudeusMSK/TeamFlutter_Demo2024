@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/Model/Fake_Category.dart';
 import 'package:mainpage_detailuser_v1/Model/Product.dart';
+import 'package:mainpage_detailuser_v1/View/ProductDetails_screen.dart';
 import 'package:mainpage_detailuser_v1/ViewModel/product_view_Model.dart';
 import 'package:provider/provider.dart';
 
@@ -39,9 +40,9 @@ class _HomeBodyState extends State<HomeBody> {
 
     - ฅ^•ﻌ•^ฅ demo only!:
                   xóa khi đã có backend ! 😺😺😺
-                  
+
      ****************************************** Start ****************************************** */
-/* 
+/*
   TODO: Class zí zụ làm mòe nhớ xóa nhoaa !
 */
   final List<Category> category = [
@@ -52,11 +53,18 @@ class _HomeBodyState extends State<HomeBody> {
     Category(4, "Nike", "${iconAddress}Nike.png"),
     Category(5, "Puma", "${iconAddress}Puna.png"),
   ];
+
+  final List<String> Urls = [
+    // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
+    "Hình 1",
+    "Hình 2",
+    "Hình 3"
+  ];
   /* ****************************************** END ******************************************
 
     - ฅ^•ﻌ•^ฅ demo only!:
                   xóa khi đã có backend ! 😺😺😺
-                  
+
      ****************************************** END ****************************************** */
 
   @override
@@ -75,7 +83,7 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
 /*
-      ****************** widgets ******************
+      ****************** widgets start ******************
 */
 
 // Title page:
@@ -189,33 +197,55 @@ class _HomeBodyState extends State<HomeBody> {
             // build gird: items positions
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // col (2 cột như trên figma nhóa !)
-              childAspectRatio: 4 / 5, // chiều rộng dài của mỗi item (để đại i, theo ông bà mách bảo :3 !!)
+              childAspectRatio: 4 /
+                  5, // chiều rộng dài của mỗi item (để đại i, theo ông bà mách bảo :3 !!)
             ),
             itemBuilder: (context, index) {
               // Get: product
               final product = viewModel.productCards[index];
-              return Card(
-                child: Column(
-                  children: [
-                  // Img product:
-                   product.imgUrl != null ? Image.network(
-                      product.imgUrl.toString(),
-                      width: 160,
-                      height: 200,
-                    ) : const Text("Sp không có hình ",
-                    style: TextStyle( fontSize: 16, fontWeight: FontWeight.bold),
+              return GestureDetector(
+                onTap: () {
+                // To do: Click >>> page details hê hê
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailPage(
+                        key: ValueKey('product_detail_page_$index'),
+                        productName: product.tenSP.toString(),
+                        productDescription: "hê hê",
+                        productImages: Urls,
+                        ProductDetail: product.idsp.toString()
+                      ),
                     ),
-                  // Name Product:
-                    Text(
-                      product.tenSP ?? "",
-                      style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                  // Price Product:
-                    Text(
-                      'Giá: ${product.giaBan} $unit', 
-                    ),
-                  ],
+                  );
+                },
+                child: Card(
+                  child: Column(
+                    children: [
+                      // Img product:
+                      product.imgUrl != null
+                          ? Image.network(
+                              product.imgUrl.toString(),
+                              width: 60, //160 iphone12
+                              height: 60, //200 iphone12
+                            )
+                          : const Text(
+                              "Sp không có hình ",
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                      // Name Product:
+                      Text(
+                        product.tenSP ?? "",
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      // Price Product:
+                      Text(
+                        'Giá: ${product.giaBan} $unit',
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
@@ -226,7 +256,6 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
 /*
-      ****************** widgets ******************
+      ****************** widgets end ******************
 */
-
 }
