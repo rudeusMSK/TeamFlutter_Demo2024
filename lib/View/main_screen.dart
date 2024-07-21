@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/components/app_bar.dart';
+import 'package:mainpage_detailuser_v1/components/bodyWidgets/LoginBody.dart';
 import 'package:mainpage_detailuser_v1/components/bottom_navigationbar.dart';
 import 'package:mainpage_detailuser_v1/components/bodyWidgets/chatBody.dart';
 import 'package:mainpage_detailuser_v1/components/bodyWidgets/editBody.dart';
@@ -53,7 +54,8 @@ class _Main_screenState extends State<Main_screen> {
       editbody(), // 1
       lovebody(), // 2
       chatbody(), // 3
-      profilebody(), // 4
+      LoginBody(),
+      //profilebody(), // 4
     ];
 
     return Scaffold(

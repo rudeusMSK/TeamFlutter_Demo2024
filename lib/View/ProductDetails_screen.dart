@@ -46,10 +46,10 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
+                    Image.network(
                       widget.productImages[currentImageIndex],
                       width: double.infinity,
-                      height: 410,
+                      height: 240,
                       fit: BoxFit.cover,
                     ),
                     const SizedBox(height: 10),

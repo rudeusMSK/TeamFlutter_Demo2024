@@ -54,12 +54,12 @@ class _HomeBodyState extends State<HomeBody> {
     Category(5, "Puma", "${iconAddress}Puna.png"),
   ];
 
-  final List<String> Urls = [
-    // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
-    "Hình 1",
-    "Hình 2",
-    "Hình 3"
-  ];
+  // final List<String> Urls = [
+  //   // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
+  //   "Hình 1",
+  //   "Hình 2",
+  //   "Hình 3"
+  // ];
   /* ****************************************** END ******************************************
 
     - ฅ^•ﻌ•^ฅ demo only!:
@@ -205,17 +205,20 @@ class _HomeBodyState extends State<HomeBody> {
               final product = viewModel.productCards[index];
               return GestureDetector(
                 onTap: () {
-                // To do: Click >>> page details hê hê
+                  // To do: Click >>> page details hê hê
+                  final List<String> Urls = [
+                    // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
+                    product.imgUrl.toString()
+                  ];
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => ProductDetailPage(
-                        key: ValueKey('product_detail_page_$index'),
-                        productName: product.tenSP.toString(),
-                        productDescription: "hê hê",
-                        productImages: Urls,
-                        ProductDetail: product.idsp.toString()
-                      ),
+                          key: ValueKey('product_detail_page_$index'),
+                          productName: product.tenSP.toString(),
+                          productDescription: "hê hê",
+                          productImages: Urls,
+                          ProductDetail: product.idsp.toString()),
                     ),
                   );
                 },
@@ -224,11 +227,13 @@ class _HomeBodyState extends State<HomeBody> {
                     children: [
                       // Img product:
                       product.imgUrl != null
-                          ? Image.network(
-                              product.imgUrl.toString(),
-                              width: 60, //160 iphone12
-                              height: 60, //200 iphone12
-                            )
+                          ? Image.network(product.imgUrl.toString(),
+                              width: 120,
+                              height: 120, errorBuilder: (BuildContext context,
+                                  Object exception, StackTrace? stackTrace) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            })
                           : const Text(
                               "Sp không có hình ",
                               style: TextStyle(
