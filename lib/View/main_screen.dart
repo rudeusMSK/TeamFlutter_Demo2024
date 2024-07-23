@@ -49,11 +49,11 @@ class _Main_screenState extends State<Main_screen> {
   Widget build(BuildContext context) {
     // TODO: Move bodyItem initialization here to ensure context is available
     List<Widget> bodyItem = [
-      const HomeBody(), // 0
+      HomeBody(), // 0
       editbody(), // 1
       lovebody(), // 2
       chatbody(), // 3
-      profilebody(), // 4
+      profilebody(context), // 4
     ];
 
     return Scaffold(

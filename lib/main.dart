@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/View/Main_screen.dart';
+import 'package:mainpage_detailuser_v1/page/DangNhap.dart';
+import 'package:mainpage_detailuser_v1/page/dk.dart';
 
 
 void main() {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Main_screen(title: 'Trang Chủ'),
+      home:  Dangnhap(),
     );
   }
 }

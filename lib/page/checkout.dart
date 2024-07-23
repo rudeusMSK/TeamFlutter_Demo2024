@@ -22,6 +22,8 @@ class _checkoutState extends State<checkout> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // chuyen den trang moi
+            Navigator.pop(context);
+
           },
         ),
         title: const Text(
@@ -94,7 +96,7 @@ class _checkoutState extends State<checkout> {
                   ),
                   
                   Image.asset(
-                    'assets/images/ipay.png',
+                    'lib/public/assets/ipay.png',
                     width: 80,
                     height: 80,
                     fit: BoxFit.contain,
@@ -111,7 +113,7 @@ class _checkoutState extends State<checkout> {
                     },                  
                   ),
                   Image.asset(
-                    'assets/images/visa.png',
+                    'lib/public/assets/visa.png',
                     width: 80,
                     height: 80,
                     fit: BoxFit.contain,
@@ -126,7 +128,7 @@ class _checkoutState extends State<checkout> {
                     },                  
                   ),
                   Image.asset(
-                    'assets/images/mastercard.jpg',
+                    'lib/public/assets/mastercard.jpg',
                     width: 80,
                     height: 80,
                     fit: BoxFit.contain,
@@ -163,7 +165,7 @@ class _checkoutState extends State<checkout> {
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(0),
                                 child: Image.asset(
-                                  'assets/images/Group_8756.png',
+                                  'lib/public/assets/Group_8756.png',
                                   width: 100,
                                   height: 100,
                                   fit: BoxFit.cover,
