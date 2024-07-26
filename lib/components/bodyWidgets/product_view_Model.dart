@@ -1,10 +1,13 @@
 // ignore: file_names
 // ignore_for_file: unnecessary_brace_in_string_interps, non_constant_identifier_names
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/Model/Product.dart';
 import 'package:mainpage_detailuser_v1/Model/ProductCartItem.dart';
 import 'package:mainpage_detailuser_v1/Services/ProductServices.dart';
+import 'package:http/http.dart' as http;
 
 class ProductViewModel extends ChangeNotifier {
   late List<Product> products = [];
@@ -24,4 +27,17 @@ class ProductViewModel extends ChangeNotifier {
     print("product cart: ${productCards}");
     notifyListeners();
   }
+
+  Future<void> fetchProducts() async {
+    final response = await http.get(Uri.parse('http://10.0.2.2:5125/api/Products'));
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+      products = jsonResponse.map((product) => Product.fromJson(product)).toList();
+      notifyListeners();
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+  
 }

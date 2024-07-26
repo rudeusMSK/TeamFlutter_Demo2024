@@ -34,7 +34,7 @@ class _DangnhapState extends State<Dangnhap> {
   Future<void> saveUserInfoToPrefs(Map<String, dynamic> userInfo) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('userInfo', json.encode(userInfo));
-    print("Luu vao share pref thanh cong");
+    print("Luu vao share pref thanh cong" + userInfo.toString());
   }//ham de luu thong tin nguoi dung vao bo nho may de su dung cho chuc nang khac ten la userInfo
 
 

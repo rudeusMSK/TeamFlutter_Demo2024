@@ -1,21 +1,31 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:mainpage_detailuser_v1/Model/Cart.dart';
 import 'package:mainpage_detailuser_v1/page/cart_page.dart';
 import 'package:mainpage_detailuser_v1/page/checkout.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailPage extends StatefulWidget {
   final String productName;
   final String productDescription;
   final List<String> productImages;
-  final String ProductDetail;
+  final String ProductId;
+  final String productPrice;
+  final String productSize;
+  final String productLoaisp;
 
-  const ProductDetailPage(
-      {super.key,
-      required this.productName,
-      required this.productDescription,
-      required this.productImages,
-      required this.ProductDetail});
+  const ProductDetailPage({
+    Key? key,
+    required this.productName,
+    required this.productDescription,
+    required this.productImages,
+    required this.ProductId,
+    required this.productPrice,
+    required this.productSize,
+    required this.productLoaisp,
+
+  }) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -25,11 +35,18 @@ class ProductDetailPage extends StatefulWidget {
 class _ProductDetailPageState extends State<ProductDetailPage> {
   bool isFavorite = false;
   int currentImageIndex = 0;
+  
 
   void _nextImage() {
     setState(() {
       currentImageIndex = (currentImageIndex + 1) % widget.productImages.length;
+      print(widget.productImages.length);
     });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override
@@ -112,29 +129,29 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                     ),
                     const SizedBox(height: 30),
                     Text(
-                      ' test: id sản phẩm ${widget.ProductDetail} ',
+                      'Tên Sản Phẩm: ${widget.productName} ',
                       style: const TextStyle(
                           color: Colors.blue,
                           fontSize: 30,
                           fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 15),
-                    const Text(
-                      'Hãng: NIKE',
+                    Text(
+                      'Mô tả: ${widget.productDescription}',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 30),
-                    const Text(
-                      'Chất liệu: Nhựa siêu nhẹ',
-                      style: TextStyle(
+                    Text(
+                      'Kích cỡ: ${widget.productSize}',
+                      style:  TextStyle(
                           color: Colors.blue,
                           fontSize: 20,
                           fontWeight: FontWeight.normal),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Đế lót: Siêu nhẹ',
+                    Text(
+                      'Loại Sản Phẩm: ${widget.productLoaisp}',
                       style: TextStyle(
                           color: Colors.blue,
                           fontSize: 20,
@@ -154,7 +171,13 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                       child: Align(
                         alignment: Alignment.bottomRight,
                         child: InkWell(
-                          onTap: () {
+                          onTap: ()  {
+                            final cartProvider = Provider.of<Cartprovider>(context, listen: false);
+                            cartProvider.addItem(
+                              Cart(id: widget.ProductId, name: widget.productName, price: widget.productPrice, imageUrl: widget.productImages[0], quantity: 1),
+                            );
+                            print("luu thanh cong");
+                            
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => CartPage()),
@@ -166,14 +189,14 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                               color: Colors.blue,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Column(
+                            child:  Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Icon(Icons.shopping_bag,
                                     color: Colors.white, size: 27),
                                 SizedBox(height: 10),
                                 Text(
-                                  '4.500.000', // Thay đổi thành giá tiền thực tế của sản phẩm
+                                  widget.productPrice, // Thay đổi thành giá tiền thực tế của sản phẩm
                                   style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.white,

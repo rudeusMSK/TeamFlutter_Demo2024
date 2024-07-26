@@ -224,6 +224,12 @@ class _DkState extends State<Dk> {
           String password = _passwordController.text;
 
           // Giả sử bạn gọi một API để đăng ký người dùng
+          if(username.isEmpty || phonenum.isEmpty || password.isEmpty){
+            setState(() {
+              _errorMessage = "Không được để trống các ô trên";
+            });
+            return;
+          }
           if (await isUsernameTaken(username)) {
             setState(() {
               _errorMessage = "Tên đăng nhập đã tồn tại!";

@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
+import 'package:mainpage_detailuser_v1/Model/ApiService.dart';
 import 'package:mainpage_detailuser_v1/Model/Fake_Category.dart';
 import 'package:mainpage_detailuser_v1/Model/Product.dart';
 import 'package:mainpage_detailuser_v1/page/ProductDetails_screen.dart';
@@ -8,9 +9,9 @@ import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class HomeBody extends StatefulWidget {
-  late Product? product;
+  //late Product? product;
 
-  HomeBody({super.key, this.product});
+  HomeBody({super.key});
 
   @override
   _HomeBodyState createState() => _HomeBodyState();
@@ -20,13 +21,15 @@ class _HomeBodyState extends State<HomeBody> {
   static const String iconAddress = "lib/public/icons/category/";
 
   //
-  ProductViewModel productViewModel = ProductViewModel();
+  //ProductViewModel productViewModel = ProductViewModel();
+  late Future<List<Product>> _products;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    productViewModel.fetch_Product_Card_List();
+    //productViewModel.fetchProducts();
+    _products =ApiService().getProduct();
   }
 
   // select item: (default)
@@ -74,9 +77,20 @@ class _HomeBodyState extends State<HomeBody> {
         productTitle(),
         categoryListView(),
         Expanded(
-            child: ChangeNotifierProvider(
-          create: (context) => productViewModel,
-          child: productListView(),
+          child: FutureBuilder<List<Product>>(
+            future: _products,
+            builder: (context, snapshot){
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('No products available'));
+              } else {
+                return productListView(snapshot.data!);
+              }
+            },
+          
         )),
       ],
     );
@@ -181,85 +195,71 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
 // Products Items:
-  Widget productListView() {
-    return Consumer<ProductViewModel>(
-      builder: (context, viewModel, child) {
-        // => chưa có repon từ endpoit >>> loading.gif
-        if (viewModel.productCards.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        // show product info:
-        else {
-          return GridView.builder(
-            // update: GridView.Count => GridView.builder
-            // Use: (hướng dẫn sử zụn)
-            itemCount: viewModel.productCards.length, // số lượng items
-            // build gird: items positions
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // col (2 cột như trên figma nhóa !)
-              childAspectRatio: 4 /
-                  5, // chiều rộng dài của mỗi item (để đại i, theo ông bà mách bảo :3 !!)
-            ),
-            itemBuilder: (context, index) {
-              // Get: product
-              final product = viewModel.productCards[index];
-              return GestureDetector(
-                onTap: () {
-                // To do: Click >>> page details hê hê
-                  final List<String> Urls = [
-                    // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
-                  product.imgUrl.toString()
-                  ];
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetailPage(
-                        key: ValueKey('product_detail_page_$index'),
-                        productName: product.tenSP.toString(),
-                        productDescription: "hê hê",
-                        productImages: Urls,
-                        ProductDetail: product.idsp.toString()
-                      ),
-                    ),
-                  );
-                },
-                child: Card(
-                  child: Column(
-                    children: [
-                      // Img product:
-                      product.imgUrl != null
-                          ? Image.network( product.imgUrl.toString(),
-                          width: 120,
-                          height: 120,
-                            errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                            return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-)
-                          : const Text(
-                              "Sp không có hình ",
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                      // Name Product:
-                      Text(
-                        product.tenSP ?? "",
-                        style: const TextStyle(
+  Widget productListView(List<Product> products) {
+    return GridView.builder(
+      itemCount: products.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 5 / 5,  ),
+      itemBuilder: (context, index){
+        final product = products[index];
+        final String? firstImageUrl = product.img != null && product.img!.isNotEmpty
+                ? product.img![0]
+                : null;   
+        return GestureDetector(
+          onTap: (){
+            final List<String> urls = product.img!;
+            Navigator.push(
+              context, 
+              MaterialPageRoute(
+                builder: (context) => ProductDetailPage(
+                  key: ValueKey('product_detail_page_$index'),
+                  productName: product.name.toString(),
+                  productDescription: product.description.toString(),
+                  productImages: urls,
+                  ProductId: product.id.toString(),
+                  productPrice: product.price.toString(),
+                  productLoaisp: product.loaisp.toString(),
+                  productSize: product.size.toString(),
+                ),
+              ),
+            );
+            
+          },
+          child: Card(
+            child: Column(
+              children: [
+                firstImageUrl != null
+                    ? Image.network(
+                        firstImageUrl,
+                        width: 120,
+                        height: 120,
+                        errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                          print('Error loading image: $error'); // Debugging line
+                          return const Center(child: Icon(Icons.error));
+                        },
+                      )
+                    : const Text(
+                        "Sp không có hình ",
+                        style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      // Price Product:
-                      Text(
-                        'Giá: ${product.giaBan} $unit',
-                      ),
-                    ],
-                  ),
+                Text(
+                  product.name ?? "",
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-              );
-            },
-          );
-        }
+                Text(
+                  'Giá: ${product.price} $unit',
+                ),                
+              ],
+            ),
+          ),
+        );
       },
+
     );
+    
   }
 
 /*

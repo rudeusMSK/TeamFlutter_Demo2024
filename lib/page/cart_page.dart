@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mainpage_detailuser_v1/Model/Cart.dart';
 import 'package:mainpage_detailuser_v1/page/checkout.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -11,6 +13,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<Cartprovider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
@@ -47,10 +50,13 @@ class _CartPageState extends State<CartPage> {
             ),
             Flexible(
               flex: 1,
-              child: ListView.builder(
+              child: cartProvider.items.isEmpty?
+              Center(child: Text("Gio hang trong"),):
+              ListView.builder(
                 shrinkWrap: true,
-                itemCount: 10,
+                itemCount: cartProvider.items.length,
                 itemBuilder: (context, index) {
+                  final item = cartProvider.items[index];
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     child: Row(
@@ -62,7 +68,7 @@ class _CartPageState extends State<CartPage> {
                             angle: 10 *
                                 (3.14 / 180.0), // Convert degrees to radians
                             child: Image.network(
-                              "https://th.bing.com/th/id/OIP.1vqu9HwAOn5SsiHVjw1MmwHaHa?rs=1&pid=ImgDetMain",
+                              item.imageUrl,
                               width: 130,
                               height: 130,
                               fit: BoxFit.cover,
@@ -77,14 +83,14 @@ class _CartPageState extends State<CartPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text("Nike Air Max 90",
+                              Text(item.name,
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(
                                 height: 5,
                               ),
-                              const Text("100 000đ",
+                              Text(item.price + " d",
                                   style: TextStyle(fontSize: 16)),
                               const SizedBox(
                                 height: 5,
@@ -104,12 +110,18 @@ class _CartPageState extends State<CartPage> {
                                         size: 18.0,
                                       ),
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      // xoa
+                                      //cartProvider.addItem(item);  
+                                      cartProvider.decreaseQuantity(item.id);                                  
+                                    },
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10.0),
-                                    child: const Text("1"),
+                                    child:  Text(
+                                      item.quantity.toString(),
+                                    ),
                                   ),
                                   InkWell(
                                     child: Container(
@@ -124,7 +136,12 @@ class _CartPageState extends State<CartPage> {
                                         size: 18.0,
                                       ),
                                     ),
-                                    onTap: () {},
+                                    onTap: () {
+                                      setState(() {
+                                        cartProvider.increaseQuantity(item.id);
+                                        //cartProvider.addItem(item);
+                                      });
+                                    },
                                   ),
                                 ],
                               )
@@ -138,7 +155,9 @@ class _CartPageState extends State<CartPage> {
                                 borderRadius: BorderRadius.circular(10)),
                             child: IconButton(
                               icon: const Icon(Icons.delete),
-                              onPressed: () {},
+                              onPressed: () {
+                                cartProvider.removeItem(item.id);
+                              },
                             ))
                       ],
                     ),
@@ -153,6 +172,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   checkoutBottomNavbar() {
+    final cartProvider= Provider.of<Cartprovider>(context);
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, right: 8.0),
       child: Container(
@@ -168,8 +188,8 @@ class _CartPageState extends State<CartPage> {
                     "Tổng Tiền",
                   ),
                   GestureDetector(
-                    child: const Text(
-                      "2300000đ",
+                    child:  Text(
+                      "${cartProvider.TotalPrice} d",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
@@ -192,7 +212,14 @@ class _CartPageState extends State<CartPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => checkout()),
+                      MaterialPageRoute(builder: (context) => checkout(
+                        cartItems: cartProvider.items.map((item) =>{
+                          'id' : item.id,
+                          'quantity' : item.quantity,
+                          'totalPrice' : item.totalPrice,
+                        }).toList(),
+                        totalPrice : cartProvider.TotalPrice,
+                      )),
                       
                     );
                   },

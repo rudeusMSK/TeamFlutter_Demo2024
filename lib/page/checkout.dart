@@ -1,10 +1,17 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:mainpage_detailuser_v1/Model/Cart.dart';
 import 'package:mainpage_detailuser_v1/page/checkout.dart';
 import 'package:mainpage_detailuser_v1/page/editShipmet.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class checkout extends StatefulWidget {
-  
-  const checkout({super.key});
+  final List<Map<String, dynamic>> cartItems;
+  final double totalPrice;
+  const checkout({super.key, required this.cartItems, required this.totalPrice});
   @override
   State<checkout> createState() => _checkoutState();
 }
@@ -12,6 +19,91 @@ class checkout extends StatefulWidget {
 class _checkoutState extends State<checkout> {
   int selected = 0;
   String newAddress = '';
+  bool isLoading = false;
+
+  Future<void> _performCheckout() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    // Convert cartItems to the format required by the API
+    final List<String> idPro = [];
+    final DateTime now = DateTime.now();
+    final String formattedDate = DateFormat('dd/MM/yyyy HH:mm:ss').format(now);
+
+    final String? idUser = await getIdUserFromPrefs();
+    if(idUser == null){
+      print("id null");
+    }
+    for (var item in widget.cartItems) {
+      idPro.addAll(List<String>.filled(item['quantity'], item['id'].toString()));
+    }
+
+    final order = {
+      'id' : "",
+      'dayCreate': formattedDate,
+      'idPro': idPro,
+      'address': newAddress,
+      'total': widget.totalPrice.toString(),
+      'idUser': idUser, 
+    };
+
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:5125/api/Order'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(order),
+    );
+
+    setState(() {
+      isLoading = false;
+    });
+    print('Response Status Code: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Provider.of<Cartprovider>(context, listen: false).clearCart();
+      Navigator.pop(context);
+      // Handle success
+      _showDialog('Thanh toán thành công', 'Cảm ơn bạn đã mua hàng!');
+    } else {
+      // Handle error
+      _showDialog('Lỗi', 'Đã xảy ra lỗi khi gửi đơn hàng.');
+    }
+  }
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<String?> getIdUserFromPrefs() async {
+  final prefs = await SharedPreferences.getInstance();
+  final String? userInfoString = prefs.getString('userInfo');
+
+  if (userInfoString != null) {
+    final Map<String, dynamic> userInfo = json.decode(userInfoString);
+    return userInfo['id'] as String; 
+  } else {
+    return null; 
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,11 +331,11 @@ class _checkoutState extends State<checkout> {
                   
               ),
 
-              const Row(
+              Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 50, 0, 0),
                     child: Text(
                       'Giá',
@@ -257,7 +349,7 @@ class _checkoutState extends State<checkout> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 50, 20, 0),
                     child: Text(
-                      '100',
+                      widget.totalPrice.toString() +" d",
                       style: TextStyle(
                             fontFamily: 'Readex Pro',
                             fontSize: 18,
@@ -287,7 +379,7 @@ class _checkoutState extends State<checkout> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 50, 20, 0),
                     child: Text(
-                      '100',
+                      '10 d',
                       style: TextStyle(
                             fontFamily: 'Readex Pro',
                             fontSize: 18,
@@ -299,11 +391,11 @@ class _checkoutState extends State<checkout> {
                 ],
               ),
 
-              const Row(
+              Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
+                  const Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(20, 50, 0, 0),
                     child: Text(
                       'Tông tiền',
@@ -317,8 +409,8 @@ class _checkoutState extends State<checkout> {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 50, 20, 0),
                     child: Text(
-                      '100',
-                      style: TextStyle(
+                      "${widget.totalPrice + 10} d",
+                      style: const TextStyle(
                             fontFamily: 'Readex Pro',
                             fontSize: 18,
                             letterSpacing: 0,
@@ -351,8 +443,9 @@ class _checkoutState extends State<checkout> {
                   ),
 
 
-                  onPressed: () {
+                  onPressed: isLoading ? null: () async {
                     // su ly thanh toan
+                    await _performCheckout();
                   },
                 ),
               ),
