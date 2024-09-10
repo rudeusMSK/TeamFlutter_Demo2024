@@ -9,6 +9,7 @@ import 'package:mainpage_detailuser_v1/components/bodyWidgets/profileBody.dart';
 import 'package:mainpage_detailuser_v1/components/bodyWidgets/Errorbody.dart';
 
 import 'package:mainpage_detailuser_v1/Model/Fake_User.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: camel_case_types
 class Main_screen extends StatefulWidget {
@@ -45,15 +46,19 @@ class _Main_screenState extends State<Main_screen> {
     print("user.name.length: ${user.name.length}");
   }
 
+  void UpdateUser () async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.getString('userInfo');
+  }
   @override
   Widget build(BuildContext context) {
     // TODO: Move bodyItem initialization here to ensure context is available
     List<Widget> bodyItem = [
-      const HomeBody(), // 0
+      HomeBody(), // 0
       editbody(), // 1
       lovebody(), // 2
       chatbody(), // 3
-      profilebody(), // 4
+      profilebody(context), // 4
     ];
 
     return Scaffold(

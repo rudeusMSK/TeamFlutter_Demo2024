@@ -1,43 +1,73 @@
+// ignore_for_file: library_private_types_in_public_api
 import 'package:flutter/material.dart';
+import 'package:mainpage_detailuser_v1/Model/ApiService.dart';
 import 'package:mainpage_detailuser_v1/Model/Fake_Category.dart';
+import 'package:mainpage_detailuser_v1/Model/Product.dart';
+import 'package:mainpage_detailuser_v1/page/ProductDetails_screen.dart';
+import 'product_view_Model.dart';
+import 'package:provider/provider.dart';
 
+// ignore: must_be_immutable
 class HomeBody extends StatefulWidget {
-  const HomeBody({super.key});
+  //late Product? product;
+
+  HomeBody({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomeBodyState createState() => _HomeBodyState();
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  static const String iconAddress = "lib\\public\\icons\\category\\";
+  static const String iconAddress = "lib/public/icons/category/";
+
+  //
+  //ProductViewModel productViewModel = ProductViewModel();
+  late Future<List<Product>> _products;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //productViewModel.fetchProducts();
+    _products =ApiService().getProduct();
+  }
+
   // select item: (default)
-  int selectedIndex = 0;
+  int selectedCategortItem = 0;
+  int selectProductItem = 0;
+  //demo:
+  int price = 10;
+  String unit = 'Đ';
 
   /* ****************************************** Start ******************************************
 
     - ฅ^•ﻌ•^ฅ demo only!:
                   xóa khi đã có backend ! 😺😺😺
-                  
-     ****************************************** Start ****************************************** */
 
-/* 
+     ****************************************** Start ****************************************** */
+/*
   TODO: Class zí zụ làm mòe nhớ xóa nhoaa !
 */
   final List<Category> category = [
     // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
-    Category(1, "All",    "${iconAddress}All.png"),
+    Category(1, "All", "${iconAddress}All.png"),
     Category(2, "Adidas", "${iconAddress}Adidas.png"),
-    Category(3, "Fila",   "${iconAddress}Fila.png"),
-    Category(4, "Nike",   "${iconAddress}Nike.png"),
-    Category(5, "Puma",   "${iconAddress}Puna.png"),
+    Category(3, "Fila", "${iconAddress}Fila.png"),
+    Category(4, "Nike", "${iconAddress}Nike.png"),
+    Category(5, "Puma", "${iconAddress}Puna.png"),
   ];
 
+  // final List<String> Urls = [
+  //   // Category(id, Name, location + Logo) - ฅ^•ﻌ•^ฅ
+  //   "Hình 1",
+  //   "Hình 2",
+  //   "Hình 3"
+  // ];
   /* ****************************************** END ******************************************
 
     - ฅ^•ﻌ•^ฅ demo only!:
                   xóa khi đã có backend ! 😺😺😺
-                  
+
      ****************************************** END ****************************************** */
 
   @override
@@ -46,21 +76,36 @@ class _HomeBodyState extends State<HomeBody> {
       children: [
         productTitle(),
         categoryListView(),
-        Expanded(child: productListView()),
+        Expanded(
+          child: FutureBuilder<List<Product>>(
+            future: _products,
+            builder: (context, snapshot){
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('No products available'));
+              } else {
+                return productListView(snapshot.data!);
+              }
+            },
+          
+        )),
       ],
     );
   }
 
-  /*
-      widgets:
- */
+/*
+      ****************** widgets start ******************
+*/
 
-// Title:
+// Title page:
   Widget productTitle() {
     String selectedCategory = 'Sản phẩm'; // default
 
-    if (selectedIndex >= 0 && selectedIndex < category.length) {
-      selectedCategory = 'Sản phẩm ${category[selectedIndex].name}';
+    if (selectedCategortItem >= 0 && selectedCategortItem < category.length) {
+      selectedCategory = category[selectedCategortItem].name.toString();
     }
 
     return Container(
@@ -72,7 +117,7 @@ class _HomeBodyState extends State<HomeBody> {
           const Align(
             alignment: Alignment.topLeft,
             child: Text(
-              'èn choai nêu prồ đúch',
+              'Sản phẩm mới',
               style: TextStyle(
                 color: Color(0xFF152354),
                 fontSize: 30,
@@ -109,7 +154,7 @@ class _HomeBodyState extends State<HomeBody> {
           return GestureDetector(
             onTap: () {
               setState(() {
-                selectedIndex = index;
+                selectedCategortItem = index;
               });
             },
             child: Row(
@@ -127,7 +172,7 @@ class _HomeBodyState extends State<HomeBody> {
                   height: 100,
 
                   decoration: BoxDecoration(
-                    color: selectedIndex == index
+                    color: selectedCategortItem == index
                         ? const Color(0xFF69BDFC)
                         : const Color(0xFFD9D9D9),
                     shape: BoxShape.circle,
@@ -150,37 +195,74 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
 // Products Items:
-  Widget productListView() {
-    return GridView.count(
-      crossAxisCount: 2,
-      children: List.generate(category.length, (index) {
-        return Center(
-          child: Container(
-            margin: const EdgeInsets.all(5),
-            padding: const EdgeInsets.fromLTRB(50, 2, 50, 100),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF8F8FA),
-              borderRadius: BorderRadius.circular(10),
-            ),
+  Widget productListView(List<Product> products) {
+    return GridView.builder(
+      itemCount: products.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 5 / 5,  ),
+      itemBuilder: (context, index){
+        final product = products[index];
+        final String? firstImageUrl = product.img != null && product.img!.isNotEmpty
+                ? product.img![0]
+                : null;   
+        return GestureDetector(
+          onTap: (){
+            final List<String> urls = product.img!;
+            Navigator.push(
+              context, 
+              MaterialPageRoute(
+                builder: (context) => ProductDetailPage(
+                  key: ValueKey('product_detail_page_$index'),
+                  productName: product.name.toString(),
+                  productDescription: product.description.toString(),
+                  productImages: urls,
+                  ProductId: product.id.toString(),
+                  productPrice: product.price.toString(),
+                  productLoaisp: product.loaisp.toString(),
+                  productSize: product.size.toString(),
+                ),
+              ),
+            );
+            
+          },
+          child: Card(
             child: Column(
               children: [
-                  Image.asset(
-                  selectedIndex == index
-                      // ignore: unnecessary_string_interpolations
-                      ? '${category[index].logo}' 
-                      :  'lib/public/imgs/Kurumi.png',
-                  width: 60,
-                  height: 60,
-                ),
-
+                firstImageUrl != null
+                    ? Image.network(
+                        firstImageUrl,
+                        width: 120,
+                        height: 120,
+                        errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                          print('Error loading image: $error'); // Debugging line
+                          return const Center(child: Icon(Icons.error));
+                        },
+                      )
+                    : const Text(
+                        "Sp không có hình ",
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                 Text(
-                  'Sản phẩm $index',
+                  product.name ?? "",
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold),
                 ),
+                Text(
+                  'Giá: ${product.price} $unit',
+                ),                
               ],
             ),
           ),
         );
-      }),
+      },
+
     );
+    
   }
+
+/*
+      ****************** widgets end ******************
+*/
 }

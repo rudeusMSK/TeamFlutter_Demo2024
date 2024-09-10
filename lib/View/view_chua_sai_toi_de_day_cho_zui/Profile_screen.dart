@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mainpage_detailuser_v1/components/app_bar.dart';
 import 'package:mainpage_detailuser_v1/components/bottom_navigationbar.dart';
+import 'package:mainpage_detailuser_v1/page/DangNhap.dart';
 
 // ignore: camel_case_types
 class Profile_screen extends StatefulWidget {
@@ -36,10 +37,38 @@ class _Main_screenState extends State<Profile_screen> {
   }
 
   Widget body() {
-    return const SafeArea(
-      child: Center(
-        child: Text("Profile Screen Body"),
-      ),
+    return SafeArea(
+      child: Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
+                child: ElevatedButton(
+                  
+                  child:  Text("Thanh Toán"),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(350, 40),
+                    backgroundColor: Color(0xFF61ADF3),
+                    padding: EdgeInsetsDirectional.fromSTEB(24, 0, 24, 0),
+                    elevation: 3,
+                    foregroundColor: Colors.white,
+                    textStyle: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+
+                  ),
+
+
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Dangnhap())
+                    );
+                  },
+                ),
+              ),
+      
     );
   }
 
